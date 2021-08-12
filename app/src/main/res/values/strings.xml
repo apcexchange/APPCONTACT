@@ -2,11 +2,12 @@
     <string name="app_name">APP CONTACT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_new_contact">add_new_contact</string>
+    <string name="add_new_contact">add new contact</string>
     <string name="add_contact">Add Contact</string>
     <string name="enter_full_name">Enter full name</string>
     <string name="contacted_has_been_save">contact has been saved successfully</string>
     <string name="error">%1$s</string>
     <string name="update_contact">Update Contact</string>
     <string name="update_contact_button">update contact</string>
+    <string name="john_cena">John Cena</string>
 </resources>

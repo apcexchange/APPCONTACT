@@ -15,6 +15,9 @@ import com.example.appcontact.R
 import com.example.appcontact.data.Contact
 import com.example.appcontact.databinding.FragmentAddContactDialogBinding
 
+/** this class is responsible for the pop up dialog fragment to add
+    contacts to contact list and firebase*/
+
 class AddContactDialogFragment : DialogFragment() {
     private var _binding : FragmentAddContactDialogBinding? =null
     private val binding get() = _binding!!
@@ -24,6 +27,8 @@ class AddContactDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        the style and theme setting for the add contact dialog fragment
         setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
     }
 
@@ -31,7 +36,12 @@ class AddContactDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
     _binding = FragmentAddContactDialogBinding.inflate(inflater,container,false)
+
+        /**creating an object of the viewmodel class so that we can asses the add function
+         *  on the contact viewmodel so that on clicking of the save button the
+         *  information is sent to fire base data base*/
         viewModel = of(this).get(ContactViewModel::class.java)
         return binding.root
     }
@@ -47,10 +57,15 @@ class AddContactDialogFragment : DialogFragment() {
             Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
             dismiss()
         })
+
+        /**the save button on the add contact pop dialog, used to save contact also
+        send data to firebase data base*/
         binding.buttonAdd.setOnClickListener {
+//            getting the information passed in by the user
             val fullName = binding.editTextFullName.text.toString().trim()
             val contactNumber = binding.editTextContact.text.toString().trim()
 
+            /**validating the input from the user to ensure that a user do not submit an empty field*/
             if (fullName.isEmpty()){
                 binding.editTextFullName.error = "This field is required"
                 return@setOnClickListener
@@ -59,6 +74,8 @@ class AddContactDialogFragment : DialogFragment() {
                 binding.editTextContact.error = "Contact number cannot be empty"
                 return@setOnClickListener
             }
+            /** creating an object of the contact class and passing in the input from the user
+             * and sending it to add function in the viewmodel class to be sent to the data base*/
             val contact = Contact()
             contact.fullName = fullName
             contact.contactNumber = contactNumber

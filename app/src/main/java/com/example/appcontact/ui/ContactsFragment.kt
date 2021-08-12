@@ -1,6 +1,7 @@
 package com.example.appcontact.ui
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,19 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appcontact.R
 import com.example.appcontact.databinding.FragmentContactsBinding
 
-class ContactsFragment : Fragment() {
+class ContactsFragment : Fragment(), ContactAdapter.ContactClickListener {
     private var _binding: FragmentContactsBinding? = null
     private val binding get() = _binding!!
-    private val adapter = ContactAdapter()
+    private val adapter = ContactAdapter(this)
     private lateinit var viewModel: ContactViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -38,6 +36,7 @@ class ContactsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewContact.adapter = adapter
+
 //        setting onClickListener on my Add contact button
         binding.addButton.setOnClickListener{
             AddContactDialogFragment().show(childFragmentManager,"")
@@ -62,8 +61,8 @@ class ContactsFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            var position = viewHolder.adapterPosition
-            var currentContact = adapter.contacts[position]
+            val position = viewHolder.adapterPosition
+            val currentContact = adapter.contacts[position]
 
             when(direction){
                 ItemTouchHelper.RIGHT -> {
@@ -93,6 +92,17 @@ class ContactsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+//    setting o clickListener on each item clicked
+    override fun onClickContact(position: Int) {
+       val intent = Intent(requireActivity(), ContactDetails::class.java).apply {
+           val name = adapter.contacts[position].fullName
+           val number = adapter.contacts[position].contactNumber
+           putExtra("name",name)
+           putExtra("phoneNumber", number)
+       }
+        startActivity(intent)
     }
 
 }

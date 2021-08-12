@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appcontact.data.Contact
 import com.example.appcontact.databinding.RecyclerViewContactBinding
 
-class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
+class ContactAdapter(
+    var listener : ContactClickListener
+) : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
 
         var contacts = mutableListOf<Contact>()
 
+//    passing our layout file for displaying our card item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(RecyclerViewContactBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
@@ -17,6 +20,9 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
        holder.binding.textViewName.text = contacts[position].fullName
        holder.binding.textViewContact.text = contacts[position].contactNumber
+        holder.binding.contactViewLayout.setOnClickListener {
+            listener.onClickContact(position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +43,10 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
         }
         notifyDataSetChanged()
     }
-    inner class ViewHolder(val binding: RecyclerViewContactBinding) : RecyclerView.ViewHolder(binding.root){
-
+    inner class ViewHolder(val binding: RecyclerViewContactBinding) : RecyclerView.ViewHolder(binding.root)
+    interface ContactClickListener{
+        fun onClickContact(position: Int)
     }
+
+
 }
